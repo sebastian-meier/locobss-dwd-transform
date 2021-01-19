@@ -1,3 +1,8 @@
+# custom ignores
+input/
+output/
+temp/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
