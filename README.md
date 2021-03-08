@@ -39,3 +39,11 @@ python import.py drought_index,frost_days
 
 ## Data Source @ DWD
 https://opendata.dwd.de/climate_environment/CDC/grids_germany/annual/
+
+### Simplification of timeseries
+
+```bash
+geo2topo timeseries.geojson > timeseries.topo.json
+toposimplify -p 0.00000001 -F timeseries.topo.json -o timeseries.simple.topo.json
+topoquantize 1e5 timeseries.simple.topo > timeseries.simple2.topo.json
+```
