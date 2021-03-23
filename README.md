@@ -1,6 +1,8 @@
 # locobss-dwd-transform
 Transform DWD data for customized [story-telling](https://github.com/sebastian-meier/locobss-story-climate-risk-zones)
 
+![Preview](thumbnail.png)
+
 ## Overview
 This set of scripts:
 - Creates a set of postgresql tables. 
@@ -72,6 +74,8 @@ You can run the *small-multiples.py* to generate small multiple visualisations f
 ```
 python small-multiples.py
 ```
+
+![Small Multiples](small_multiples.png)
 
 ### Setup your spatial units
 Create a table for either postcode, municipality or ags2, each should contain at least id and geom. You can find data for each at: https://gdz.bkg.bund.de/index.php/default/open-data.html
