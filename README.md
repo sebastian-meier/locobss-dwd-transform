@@ -83,10 +83,10 @@ Create a table for either postcode, municipality or ags2, each should contain at
 ### Import climate risk data
 If you want to build the same regional reports you need additional data and tables:
 
-- climate_grid_zones:  Derived from [Umweltbundesamt](https://www.umweltbundesamt.de/sites/default/files/medien/376/dokumente/handlungsfelduebergreifende_schwerpunkte_der_folgen_des_klimawandels_1.pdf)
-- flood_ocean:  Derived from [Umweltbundesamt](https://www.umweltbundesamt.de/sites/default/files/medien/376/dokumente/handlungsfelduebergreifende_schwerpunkte_der_folgen_des_klimawandels_1.pdf)
-- dense_spaces: Derived from [MKRO](https://www.bbsr.bund.de/BBSR/DE/forschung/raumbeobachtung/Raumabgrenzungen/deutschland/gemeinden/Verdichtungsraeume/verdichtungsraeume.html)
-- flood_hazard: Derived from []()
+- climate_grid_zones: **./data/klimazonen.zip** Derived from [Umweltbundesamt](https://www.umweltbundesamt.de/sites/default/files/medien/376/dokumente/handlungsfelduebergreifende_schwerpunkte_der_folgen_des_klimawandels_1.pdf)
+- flood_ocean: **./data/sturmflut.zip** Derived from [Umweltbundesamt](https://www.umweltbundesamt.de/sites/default/files/medien/376/dokumente/handlungsfelduebergreifende_schwerpunkte_der_folgen_des_klimawandels_1.pdf)
+- dense_spaces: **./data/verdichtungsraeume.zip** Derived from [MKRO](https://www.bbsr.bund.de/BBSR/DE/forschung/raumbeobachtung/Raumabgrenzungen/deutschland/gemeinden/Verdichtungsraeume/verdichtungsraeume.html)
+- flood_hazard: **./data/hochwasser-low-res.zip** Derived from [BAfG](https://geoportal.bafg.de/inspire/download/NZ/servicefeed.xml)
 
 ### Generate reports for spatial units
 If you have imported everything, you can run the reports:
