@@ -56,8 +56,8 @@ with conn.cursor() as cur:
     );""")
   
   # add later for better performance
-  # cur.execute("CREATE INDEX IF NOT EXISTS data_geom_id_idx ON data (geom_id)")
-  # cur.execute("CREATE INDEX IF NOT EXISTS data_type_idx ON data (type)")
+  cur.execute("CREATE INDEX IF NOT EXISTS data_geom_id_idx ON data (geom_id)")
+  cur.execute("CREATE INDEX IF NOT EXISTS data_type_idx ON data (type)")
   cur.execute("CREATE INDEX IF NOT EXISTS grid_geom_idx ON grid USING GIST (geom)")
   cur.execute("CREATE INDEX IF NOT EXISTS grid_centroid_idx ON grid USING GIST (centroid)")
   cur.execute("CREATE INDEX IF NOT EXISTS data_temp_geom_idx ON data_temp USING GIST (geom)")
@@ -88,6 +88,20 @@ with conn.cursor() as cur:
   cur.execute("""CREATE TABLE IF NOT EXISTS public.summary_postcode (
       id SERIAL PRIMARY KEY,
       postcode INTEGER,
+      type TEXT,
+      value JSON
+    );""")
+  
+  cur.execute("""CREATE TABLE IF NOT EXISTS public.summary_municipality (
+      id SERIAL PRIMARY KEY,
+      municipality INTEGER,
+      type TEXT,
+      value JSON
+    );""")
+  
+  cur.execute("""CREATE TABLE IF NOT EXISTS public.ags5 (
+      id SERIAL PRIMARY KEY,
+      ags5 INTEGER,
       type TEXT,
       value JSON
     );""")

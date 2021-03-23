@@ -89,13 +89,14 @@ with psycopg2.connect(dsn) as conn:
     
     data_germany = []
     for r in germany_data:
-      values = []
-      for year in r["value"]:
-        values.append([year["year"],year["min"],year["avg"],year["max"]])
-      data_germany.append({
-        "type": r["type"],
-        "values": values
-      })
+      if r["type"] == "air_temperature_max":
+        values = []
+        for year in r["value"]:
+          values.append([year["year"],year["min"],year["avg"],year["max"]])
+        data_germany.append({
+          "type": r["type"],
+          "values": values
+        })
     
     # .....----------------------------------------
 
@@ -103,10 +104,10 @@ with psycopg2.connect(dsn) as conn:
     cur.execute("""SELECT DISTINCT plz FROM postcode""") # LIMIT 1 ALL OFFSET 2758
     postcodes = cur.fetchall()
 
+    count = 0
+
     for postcode_dict in postcodes:
       postcode = postcode_dict["plz"]
-
-      print(postcode)
 
       cur.execute("""WITH buffer AS (
           SELECT ST_Transform(ST_Buffer(ST_Transform(geom, 3857), 5000),4326) AS buffer_geom, geom, plz FROM postcode WHERE plz = %s 
@@ -130,6 +131,8 @@ with psycopg2.connect(dsn) as conn:
             ) AS anchors
           FROM 
             fluvial
+          WHERE
+            ST_Area(geom) > 0 AND ST_Area(geom) IS NOT NULL
           ORDER BY
             level, ST_Area(geom) DESC
         )
@@ -146,8 +149,12 @@ with psycopg2.connect(dsn) as conn:
               JSON_BUILD_OBJECT(
                 'bbox',
                 ST_AsGeoJSON(ST_Envelope(dense_spaces.geom), 3),
+                'anchors',
+                pg_temp.ST_AnchorPoints(dense_spaces.geom),
                 'name',
-                "download-ref-2015-xls_vrname"
+                "download-ref-2015-xls_vrname",
+                'fid',
+                dense_spaces.fid
               ) AS value
             FROM 
               dense_spaces
@@ -303,34 +310,50 @@ with psycopg2.connect(dsn) as conn:
         'postcode_buff_anchors': res['postcode_buff_anchors'],
         'dense_space': {
           'bbox': None,
-          'name': None
+          'name': None,
+          'anchors': None,
+          'fid': None
         },
         'fluvial_flood': floods,
         'fluvial_flood_anchors': res['fluvial_flood_anchors'],
         'has_ocean_flood':int(res['has_ocean_flood']),
         'risk_zones':res['risk_zones'],
         'risk_zone_ids':res['risk_zone_ids'],
-        'risk_zone_points': res['risk_zone_points'],
+        'risk_zone_points': [
+        ],
         'risk_zone_anchors': res['risk_zone_anchors'],
         'data_germany': data_germany,
         'data_postcode':[]
       }
 
+      for risk_zone_point in res['risk_zone_points']:
+        data['risk_zone_points'].append({
+          'fid': risk_zone_point['fid'],
+          'anchors': json.loads(risk_zone_point['anchors']),
+        })          
+
       if res['dense_space'] and res['dense_space']['bbox']:
         data['dense_space']['bbox'] = json.loads(res['dense_space']['bbox'])
+      
+      if res['dense_space'] and res['dense_space']['anchors']:
+        data['dense_space']['anchors'] = res['dense_space']['anchors']
+      
+      if res['dense_space'] and res['dense_space']['fid']:
+        data['dense_space']['fid'] = res['dense_space']['fid']
       
       if res['dense_space'] and res['dense_space']['name']:
         data['dense_space']['name'] = res['dense_space']['name']
 
       if res['postcode_data']:
         for d in res['postcode_data']:
-          values = []
-          for year in d["value"]:
-            values.append([year["year"],year["min"],year["avg"],year["max"]])
-          data['data_postcode'].append({
-            "type": d["type"],
-            "values": values
-          })
+          if d["type"] == "air_temperature_max":
+            values = []
+            for year in d["value"]:
+              values.append([year["year"],year["min"],year["avg"],year["max"]])
+            data['data_postcode'].append({
+              "type": d["type"],
+              "values": values
+            })
       else:
         missing += 1
       # geojson = {
@@ -362,7 +385,9 @@ with psycopg2.connect(dsn) as conn:
       with gzip.open('./output/postcodes/' + postcode + '.json', 'wt') as f:
         f.write(json.dumps(data))
       
-      print(postcode)
+      count += 1
+      print(postcode, count, len(postcodes))
+      
       
 print(missing)
 

@@ -134,8 +134,8 @@ with psycopg2.connect(dsn) as conn:
 
         with open('temp/' + filename + '.geojson', 'w') as outfile:
           json.dump(geojson, outfile)
-          print('geo2topo -o /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.topo.json -q 1e5 /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.geojson')
-          print('toposimplify -p 0.00001 -F /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.topo.json -o /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/final/' + filename + '.simple.topo.json')
+          # print('geo2topo -o /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.topo.json -q 1e5 /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.geojson')
+          # print('toposimplify -p 0.00001 -F /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.topo.json -o /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/final/' + filename + '.simple.topo.json')
           # os.system('geo2topo /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.geojson > /home/sebastian/Sites/LoCobSS/locobss-dwd-transform/temp/' + filename + '.topo.json')
           # toposimplify -p 0.00000001 -F timeseries.topo.json -o timeseries.simple.topo.json
           # topoquantize 1e5 timeseries.simple.topo > timeseries.simple2.topo.json
