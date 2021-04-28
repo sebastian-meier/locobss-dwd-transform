@@ -1,3 +1,5 @@
+This repo is part of the LoCobSS research project. More details about the project and dependencies to other repos can be found [here](https://github.com/sebastian-meier/LoCobSS-documentation).
+
 # locobss-dwd-transform
 Transform DWD data for customized [story-telling](https://github.com/sebastian-meier/locobss-story-climate-risk-zones)
 
